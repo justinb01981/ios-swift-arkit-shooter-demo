@@ -24,16 +24,16 @@ extension ViewController {
         let Mag: Float = 20
         
         // add an object with velocity along our camera z-vector
-        let planeScene = SCNScene(named: "newship.scn")
+        let planeScene = SCNScene(named: "bullet.scn")
         
-        if let plane = planeScene?.rootNode.childNodes.first {
-            plane.removeFromParentNode()
+        if let bullet = planeScene?.rootNode.childNodes.first {
+            bullet.removeFromParentNode()
             
-            plane.scale = SCNVector3(0.2, 0.2, 0.2)
-            plane.position = pos
-            plane.transform = tf
+            bullet.scale = SCNVector3(0.05, 0.05, 0.05)
+            bullet.position = pos
+            bullet.transform = tf
             
-            sceneView.scene.rootNode.addChildNode(plane)
+            sceneView.scene.rootNode.addChildNode(bullet)
             
             /*
             SCNTransaction.animationDuration = 30
@@ -42,7 +42,7 @@ extension ViewController {
             SCNTransaction.commit()
             */
             
-            scnManager.addNode(plane, withVelocity: SCNVector3(v.x * Mag, v.y * Mag, v.z * Mag), lifetime: 10)
+            scnManager.addBullet(bullet, withVelocity: SCNVector3(v.x * Mag, v.y * Mag, v.z * Mag), lifetime: 10)
         }
     }
     

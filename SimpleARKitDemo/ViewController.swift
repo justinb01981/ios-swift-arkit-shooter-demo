@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scnManager = SceneManager(scene: self.sceneView.scene)
+        scnManager = SceneManager(scene: self.sceneView!)
         
         addTapGestureToSceneView()
     }
