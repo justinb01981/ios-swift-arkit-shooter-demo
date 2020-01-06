@@ -21,7 +21,7 @@ extension ViewController {
         let tf = SCNMatrix4(frame.camera.transform)
         let v = SCNVector3(-1 * tf.m31, -1 * tf.m32, -1 * tf.m33)
         let pos = SCNVector3(tf.m41, tf.m42, tf.m43)
-        let Mag: Float = 20
+        let Mag: Float = 2.0
         
         // add an object with velocity along our camera z-vector
         let planeScene = SCNScene(named: "bullet.scn")
@@ -29,7 +29,7 @@ extension ViewController {
         if let bullet = planeScene?.rootNode.childNodes.first {
             bullet.removeFromParentNode()
             
-            bullet.scale = SCNVector3(0.05, 0.05, 0.05)
+            bullet.scale = SCNVector3(0.2, 0.2, 0.2)
             bullet.position = pos
             bullet.transform = tf
             
