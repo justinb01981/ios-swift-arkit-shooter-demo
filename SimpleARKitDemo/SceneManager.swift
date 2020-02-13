@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import ARKit
 
+
 class SceneManager: NSObject {
     
     //MARK: -- private types
@@ -34,7 +35,7 @@ class SceneManager: NSObject {
             return sqrt(dX*dX + dY*dY + dZ*dZ)
         }
     }
-    
+
     class SCNMovingBullet: SCNMovingNode {
         override init(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float = 9999.0) {
             super.init(node, withVelocity: withVelocity, lifetime: lifetime)
@@ -42,18 +43,18 @@ class SceneManager: NSObject {
     }
     
     // MARK: -- class vars
-    private var scene: ARSCNView
-    private var nodesInMotion: [SCNMovingNode] = []
-    private var bulletsInMotion: [SCNMovingBullet] = []
-    private let fps: Float = 60.0
-    private var timer: Timer!
-    private var framesTillNextTarget = 120.0
-    private var spawnRange: Float = 1.0
+    var scene: ARSCNView!
+    var nodesInMotion: [SCNMovingNode] = []
+    var bulletsInMotion: [SCNMovingBullet] = []
+    let fps: Float = 60.0
+    var timer: Timer!
+    var framesTillNextTarget = 120.0
+    var spawnRange: Float = 1.0
     
     // MARK: -- implementation
     required init(scene: ARSCNView) {
         self.scene = scene
-        
+
         super.init()
     }
     
@@ -62,25 +63,26 @@ class SceneManager: NSObject {
         
         // check collisions
         for bullet in bulletsInMotion {
+            
             for node in nodesInMotion {
-                let b1 = bullet.scnNode.boundingBox
-                let b2 = node.scnNode.position
                 
-                var collided = true
+                let b2 = bullet.scnNode.boundingBox
+                let b1 = node.scnNode.position
                 
-                if b2.max.x >= b1.x && b2.min.x < b1.x
-                    && b2.max.y >= b1.y && b2.min.y < b1.y
-                    && b2.max.z >= b1.z && b2.min.z < b1.z
-                {
-                    // collision
-                    node.destroyAfterSeconds = 0
-                    bullet.destroyAfterSeconds = 0
-                    
-                    print("collision @distance: \(node.distance(fromNode: bullet.scnNode))")
+                if b2.max.x >= b1.x && b2.min.x < b1.x {
+                    if b2.max.y >= b1.y && b2.min.y < b1.y {
+                        if b2.max.z >= b1.z && b2.min.z < b1.z {
+                            // collision
+                            node.destroyAfterSeconds = 0
+                            bullet.destroyAfterSeconds = 0
+                            
+                            //print("collision @distance: \(node.distance(fromNode: bullet.scnNode))")
+                        }
+                    }
                 }
                 
-                if node.sizeRadius+bullet.sizeRadius >= node.distance(fromNode: bullet.scnNode) {
-
+                if node.scnNode.boundingSphere.radius + bullet.scnNode.boundingSphere.radius >= node.distance(fromNode: bullet.scnNode) {
+                    print("collision!")
                 }
             }
         }
@@ -114,12 +116,12 @@ class SceneManager: NSObject {
                 plane.removeFromParentNode()
                 
                 plane.scale = SCNVector3(0.2, 0.2, 0.2)
-                /*
-                plane.position = SCNVector3(camTranslation.x + Float.random(in: -spawnRange..<spawnRange),
-                                            camTranslation.y /* + Float.random(in: -spawnRange..<spawnRange)*/,
-                                            camTranslation.z + Float.random(in: -spawnRange..<spawnRange))
-                */
-                plane.position = SCNVector3(camTranslation.x+0.2,
+
+//                plane.position = SCNVector3(camTranslation.x + Float.random(in: -spawnRange..<spawnRange),
+//                                            camTranslation.y /* + Float.random(in: -spawnRange..<spawnRange)*/,
+//                                            camTranslation.z + Float.random(in: -spawnRange..<spawnRange))
+ 
+                plane.position = SCNVector3(camTranslation.x+0.3,
                                             camTranslation.y,
                                             camTranslation.z)
                 
@@ -133,9 +135,9 @@ class SceneManager: NSObject {
                 //plane.eulerAngles = SCNVector3(camTransformInvert)
                 //plane.localTranslate(by: SCNVector3(0, 0, -5.0))
                 
-                self.scene.scene.rootNode.addChildNode(plane)
+                scene.scene.rootNode.addChildNode(plane)
                 
-                addTarget(plane, withVelocity: plane.convertVector(SCNVector3(0, 0, -0.2), to: nil))
+                addTarget(plane, withVelocity: plane.convertVector(SCNVector3(0, 0, -0.2), to: nil), lifetime: 9999.0)
             }
             
             framesTillNextTarget = 120 * 4.0
@@ -147,7 +149,8 @@ class SceneManager: NSObject {
     // MARK: -- public methods
     
     func start() {
-        timer = Timer(timeInterval: TimeInterval(1.0/fps), repeats: true) { [weak self] (_) in
+        timer = Timer(timeInterval: TimeInterval(1.0/fps), repeats: true) {
+            [weak self] timer in
             guard let strongSelf = self else {
                 return
             }
@@ -156,7 +159,7 @@ class SceneManager: NSObject {
             strongSelf.updateTargets()
         }
         
-        RunLoop.main.add(timer, forMode: .defaultRunLoopMode)
+        RunLoop.main.add(timer, forMode: .default)
     }
     
     func stop() {
@@ -164,12 +167,12 @@ class SceneManager: NSObject {
         timer = nil
     }
     
-    func addTarget(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float = 9999.0) {
+    func addTarget(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float) {
         let newNode = SCNMovingNode(node, withVelocity: withVelocity, lifetime: lifetime)
         nodesInMotion.append(newNode)
     }
     
-    func addBullet(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float = 9999.0) {
+    func addBullet(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float) {
         let newNode = SCNMovingBullet(node, withVelocity: withVelocity, lifetime: lifetime)
         bulletsInMotion.append(newNode)
     }

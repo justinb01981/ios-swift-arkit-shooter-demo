@@ -11,12 +11,12 @@
 		D0142104237CD1CC00BA36E5 /* newship.scn in Resources */ = {isa = PBXBuildFile; fileRef = D0142103237CD1CC00BA36E5 /* newship.scn */; };
 		D0142106237CD27800BA36E5 /* texture115.bmp in Resources */ = {isa = PBXBuildFile; fileRef = D0142105237CD27800BA36E5 /* texture115.bmp */; };
 		D0142108237DC2F500BA36E5 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0142107237DC2F500BA36E5 /* ViewControllerExtensions.swift */; };
-		D09F648D2391C70200A698BC /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09F648C2391C70200A698BC /* SceneManager.swift */; };
+		D07E2DC523F5FA8700350994 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09F648C2391C70200A698BC /* SceneManager.swift */; };
 		D09F648F239484FC00A698BC /* bullet.obj in Resources */ = {isa = PBXBuildFile; fileRef = D09F648E239484FC00A698BC /* bullet.obj */; };
 		D09F64912394852900A698BC /* bullettex.png in Resources */ = {isa = PBXBuildFile; fileRef = D09F64902394852900A698BC /* bullettex.png */; };
 		D09F64932394856F00A698BC /* bullet.scn in Resources */ = {isa = PBXBuildFile; fileRef = D09F64922394856F00A698BC /* bullet.scn */; };
-		F447DABF1F7E028300713E8D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447DABE1F7E028300713E8D /* AppDelegate.swift */; };
-		F447DAC11F7E028300713E8D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447DAC01F7E028300713E8D /* ViewController.swift */; };
+		D0FD8C0123F5F35600BAE04F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447DABE1F7E028300713E8D /* AppDelegate.swift */; };
+		D0FD8C0223F5F35800BAE04F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447DAC01F7E028300713E8D /* ViewController.swift */; };
 		F447DAC41F7E028300713E8D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F447DAC21F7E028300713E8D /* Main.storyboard */; };
 		F447DAC61F7E028300713E8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F447DAC51F7E028300713E8D /* Assets.xcassets */; };
 		F447DAC91F7E028300713E8D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F447DAC71F7E028300713E8D /* LaunchScreen.storyboard */; };
@@ -115,7 +115,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = AppCoda;
 				TargetAttributes = {
 					F447DABA1F7E028300713E8D = {
@@ -166,10 +166,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F447DAC11F7E028300713E8D /* ViewController.swift in Sources */,
+				D0FD8C0123F5F35600BAE04F /* AppDelegate.swift in Sources */,
 				D0142108237DC2F500BA36E5 /* ViewControllerExtensions.swift in Sources */,
-				D09F648D2391C70200A698BC /* SceneManager.swift in Sources */,
-				F447DABF1F7E028300713E8D /* AppDelegate.swift in Sources */,
+				D07E2DC523F5FA8700350994 /* SceneManager.swift in Sources */,
+				D0FD8C0223F5F35800BAE04F /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +209,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -216,6 +217,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -249,6 +251,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -266,6 +269,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -273,6 +277,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -297,7 +302,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -314,7 +321,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.domain17.ARKitExperiments;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -331,7 +338,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.domain17.ARKitExperiments;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

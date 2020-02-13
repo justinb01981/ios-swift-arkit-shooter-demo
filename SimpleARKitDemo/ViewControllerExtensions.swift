@@ -54,7 +54,7 @@ extension ViewController {
             return
         }
         
-        let S = (touch.location(in: view).x - touch.previousLocation(in: view).x) / fabs(touch.location(in: view).x - touch.previousLocation(in: view).x)
+        let S = (touch.location(in: view).x - touch.previousLocation(in: view).x) / abs(touch.location(in: view).x - touch.previousLocation(in: view).x)
         
         if S.isNaN {
             return
