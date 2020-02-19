@@ -11,10 +11,10 @@
 		D0142104237CD1CC00BA36E5 /* newship.scn in Resources */ = {isa = PBXBuildFile; fileRef = D0142103237CD1CC00BA36E5 /* newship.scn */; };
 		D0142106237CD27800BA36E5 /* texture115.bmp in Resources */ = {isa = PBXBuildFile; fileRef = D0142105237CD27800BA36E5 /* texture115.bmp */; };
 		D0142108237DC2F500BA36E5 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0142107237DC2F500BA36E5 /* ViewControllerExtensions.swift */; };
+		D02040E823F74C9000E5940C /* bullet.obj in Resources */ = {isa = PBXBuildFile; fileRef = D02040E723F74C9000E5940C /* bullet.obj */; };
+		D02040EA23F74CDB00E5940C /* bullettex.png in Resources */ = {isa = PBXBuildFile; fileRef = D02040E923F74CDB00E5940C /* bullettex.png */; };
+		D02040EC23F74DC100E5940C /* bullet.scn in Resources */ = {isa = PBXBuildFile; fileRef = D02040EB23F74DC100E5940C /* bullet.scn */; };
 		D07E2DC523F5FA8700350994 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09F648C2391C70200A698BC /* SceneManager.swift */; };
-		D09F648F239484FC00A698BC /* bullet.obj in Resources */ = {isa = PBXBuildFile; fileRef = D09F648E239484FC00A698BC /* bullet.obj */; };
-		D09F64912394852900A698BC /* bullettex.png in Resources */ = {isa = PBXBuildFile; fileRef = D09F64902394852900A698BC /* bullettex.png */; };
-		D09F64932394856F00A698BC /* bullet.scn in Resources */ = {isa = PBXBuildFile; fileRef = D09F64922394856F00A698BC /* bullet.scn */; };
 		D0FD8C0123F5F35600BAE04F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447DABE1F7E028300713E8D /* AppDelegate.swift */; };
 		D0FD8C0223F5F35800BAE04F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447DAC01F7E028300713E8D /* ViewController.swift */; };
 		F447DAC41F7E028300713E8D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F447DAC21F7E028300713E8D /* Main.storyboard */; };
@@ -27,10 +27,10 @@
 		D0142103237CD1CC00BA36E5 /* newship.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = newship.scn; sourceTree = "<group>"; };
 		D0142105237CD27800BA36E5 /* texture115.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = texture115.bmp; sourceTree = "<group>"; };
 		D0142107237DC2F500BA36E5 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
+		D02040E723F74C9000E5940C /* bullet.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bullet.obj; path = ../../../Desktop/bullet.obj; sourceTree = "<group>"; };
+		D02040E923F74CDB00E5940C /* bullettex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullettex.png; sourceTree = "<group>"; };
+		D02040EB23F74DC100E5940C /* bullet.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = bullet.scn; sourceTree = "<group>"; };
 		D09F648C2391C70200A698BC /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
-		D09F648E239484FC00A698BC /* bullet.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bullet.obj; sourceTree = "<group>"; };
-		D09F64902394852900A698BC /* bullettex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullettex.png; sourceTree = "<group>"; };
-		D09F64922394856F00A698BC /* bullet.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = bullet.scn; sourceTree = "<group>"; };
 		F447DABB1F7E028300713E8D /* SimpleARKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleARKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F447DABE1F7E028300713E8D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F447DAC01F7E028300713E8D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -76,10 +76,10 @@
 				D0142107237DC2F500BA36E5 /* ViewControllerExtensions.swift */,
 				D0142101237CD0DE00BA36E5 /* newship.obj */,
 				D0142103237CD1CC00BA36E5 /* newship.scn */,
-				D09F648E239484FC00A698BC /* bullet.obj */,
-				D09F64922394856F00A698BC /* bullet.scn */,
 				D0142105237CD27800BA36E5 /* texture115.bmp */,
-				D09F64902394852900A698BC /* bullettex.png */,
+				D02040E723F74C9000E5940C /* bullet.obj */,
+				D02040EB23F74DC100E5940C /* bullet.scn */,
+				D02040E923F74CDB00E5940C /* bullettex.png */,
 				F447DAC21F7E028300713E8D /* Main.storyboard */,
 				F447DAC51F7E028300713E8D /* Assets.xcassets */,
 				F447DAC71F7E028300713E8D /* LaunchScreen.storyboard */,
@@ -147,11 +147,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D09F648F239484FC00A698BC /* bullet.obj in Resources */,
-				D09F64932394856F00A698BC /* bullet.scn in Resources */,
-				D09F64912394852900A698BC /* bullettex.png in Resources */,
 				D0142104237CD1CC00BA36E5 /* newship.scn in Resources */,
+				D02040EC23F74DC100E5940C /* bullet.scn in Resources */,
+				D02040EA23F74CDB00E5940C /* bullettex.png in Resources */,
 				F447DAC91F7E028300713E8D /* LaunchScreen.storyboard in Resources */,
+				D02040E823F74C9000E5940C /* bullet.obj in Resources */,
 				F447DAC61F7E028300713E8D /* Assets.xcassets in Resources */,
 				D0142102237CD0DE00BA36E5 /* newship.obj in Resources */,
 				F447DAC41F7E028300713E8D /* Main.storyboard in Resources */,

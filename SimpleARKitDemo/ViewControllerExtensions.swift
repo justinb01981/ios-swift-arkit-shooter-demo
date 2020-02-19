@@ -21,7 +21,7 @@ extension ViewController {
         let tf = SCNMatrix4(frame.camera.transform)
         let v = SCNVector3(-1 * tf.m31, -1 * tf.m32, -1 * tf.m33)
         let pos = SCNVector3(tf.m41, tf.m42, tf.m43)
-        let Mag: Float = 2.0
+        let Mag: Float = 4.0
         
         // add an object with velocity along our camera z-vector
         let planeScene = SCNScene(named: "bullet.scn")
@@ -45,7 +45,7 @@ extension ViewController {
             scnManager.addBullet(bullet, withVelocity: SCNVector3(v.x * Mag, v.y * Mag, v.z * Mag), lifetime: 10)
         }
     }
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         

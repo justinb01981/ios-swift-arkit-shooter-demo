@@ -16,7 +16,7 @@ class SceneManager: NSObject {
     //MARK: -- private types
     class SCNMovingNode: NSObject {
         
-        init(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float = 9999.0) {
+        init(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float = 999.0) {
             self.scnNode = node
             self.vel = withVelocity
             self.destroyAfterSeconds = lifetime
@@ -37,8 +37,10 @@ class SceneManager: NSObject {
     }
 
     class SCNMovingBullet: SCNMovingNode {
-        override init(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float = 9999.0) {
+        override init(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float = 999.0) {
             super.init(node, withVelocity: withVelocity, lifetime: lifetime)
+            
+            node.scale = SCNVector3(0.2, 0.2, 0.2)
         }
     }
     
@@ -49,7 +51,7 @@ class SceneManager: NSObject {
     let fps: Float = 60.0
     var timer: Timer!
     var framesTillNextTarget = 120.0
-    var spawnRange: Float = 1.0
+    var spawnRange: Float = 2.0
     
     // MARK: -- implementation
     required init(scene: ARSCNView) {
@@ -66,12 +68,13 @@ class SceneManager: NSObject {
             
             for node in nodesInMotion {
                 
-                let b2 = bullet.scnNode.boundingBox
-                let b1 = node.scnNode.position
+                let b1 = bullet.scnNode.position
+                let b2 = node.scnNode.boundingBox
+                let b2o = node.scnNode.position
                 
-                if b2.max.x >= b1.x && b2.min.x < b1.x {
-                    if b2.max.y >= b1.y && b2.min.y < b1.y {
-                        if b2.max.z >= b1.z && b2.min.z < b1.z {
+                if b2.max.x+b2o.x >= b1.x && b2.min.x+b2o.x <= b1.x {
+                    if b2.max.y+b2o.y >= b1.y && b2.min.y+b2o.y <= b1.y {
+                        if b2.max.z+b2o.z >= b1.z && b2.min.z+b2o.z <= b1.z {
                             // collision
                             node.destroyAfterSeconds = 0
                             bullet.destroyAfterSeconds = 0
@@ -79,10 +82,6 @@ class SceneManager: NSObject {
                             //print("collision @distance: \(node.distance(fromNode: bullet.scnNode))")
                         }
                     }
-                }
-                
-                if node.scnNode.boundingSphere.radius + bullet.scnNode.boundingSphere.radius >= node.distance(fromNode: bullet.scnNode) {
-                    print("collision!")
                 }
             }
         }
@@ -115,19 +114,28 @@ class SceneManager: NSObject {
                 
                 plane.removeFromParentNode()
                 
+                // scale model to approximate size user expects
                 plane.scale = SCNVector3(0.2, 0.2, 0.2)
 
-//                plane.position = SCNVector3(camTranslation.x + Float.random(in: -spawnRange..<spawnRange),
-//                                            camTranslation.y /* + Float.random(in: -spawnRange..<spawnRange)*/,
-//                                            camTranslation.z + Float.random(in: -spawnRange..<spawnRange))
- 
-                plane.position = SCNVector3(camTranslation.x+0.3,
-                                            camTranslation.y,
-                                            camTranslation.z)
+                plane.position = SCNVector3(camTranslation.x + Float.random(in: -spawnRange..<spawnRange),
+                                            camTranslation.y /* + Float.random(in: -spawnRange..<spawnRange)*/,
+                                            camTranslation.z + Float.random(in: -spawnRange..<spawnRange))
                 
-                plane.eulerAngles = SCNVector3(Float.random(in: -3.14159..<3.14159),
-                                               Float.random(in: -3.14159..<3.14159),
-                                               Float.random(in: -3.14159..<3.14159))
+                let dist = sqrt(
+                    (plane.position.x - camTranslation.x) * (plane.position.x - camTranslation.x) +
+                    (plane.position.y - camTranslation.y) * (plane.position.y - camTranslation.y) +
+                    (plane.position.z - camTranslation.z) * (plane.position.z - camTranslation.z)
+                )
+                let V = SCNVector3((plane.position.x - camTranslation.x) / dist,
+                                   (plane.position.y - camTranslation.y) / dist,
+                                   (plane.position.z - camTranslation.z) / dist
+                )
+                
+                plane.orientation = SCNQuaternion(V.x, V.y, V.z, 1.0)
+                
+//                plane.eulerAngles = SCNVector3(Float.random(in: -3.14159..<3.14159),
+//                                               Float.random(in: -3.14159..<3.14159),
+//                                               Float.random(in: -3.14159..<3.14159))
                 
                 // camera position, then invert orientation along local Z and translate
                 //let camTransformInvert = scene.session.currentFrame!.camera.eulerAngles.addingProduct(0, simd_float3(x: 0, y: 1, z: 0))
