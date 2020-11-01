@@ -52,10 +52,16 @@ class SceneManager: NSObject {
     var timer: Timer!
     var framesTillNextTarget = 120.0
     var spawnRange: Float = 2.0
+    var selectedNode: SCNNode!
+    var textureImage: UIImage!
+    
+    static var scaleVector = SCNVector3(0.02, 0.02, 0.02)
     
     // MARK: -- implementation
     required init(scene: ARSCNView) {
         self.scene = scene
+        
+        self.textureImage = UIImage(named: "bullettex.png")
 
         super.init()
     }
@@ -107,45 +113,45 @@ class SceneManager: NSObject {
         
         if framesTillNextTarget <= 0 {
         
-            let planeScene = SCNScene(named: "newship.scn")
+            let jetScene = SCNScene(named: "newship.scn")
             
-            if let plane = planeScene?.rootNode.childNodes.first {
+            if let jet = jetScene?.rootNode.childNodes.first {
                 let camTranslation = scene.session.currentFrame!.camera.transform.translation
                 
-                plane.removeFromParentNode()
+                jet.removeFromParentNode()
                 
                 // scale model to approximate size user expects
-                plane.scale = SCNVector3(0.2, 0.2, 0.2)
+                jet.scale = SCNVector3(0.2, 0.2, 0.2)
 
-                plane.position = SCNVector3(camTranslation.x + Float.random(in: -spawnRange..<spawnRange),
+                jet.position = SCNVector3(camTranslation.x + Float.random(in: -spawnRange..<spawnRange),
                                             camTranslation.y /* + Float.random(in: -spawnRange..<spawnRange)*/,
                                             camTranslation.z + Float.random(in: -spawnRange..<spawnRange))
                 
                 let dist = sqrt(
-                    (plane.position.x - camTranslation.x) * (plane.position.x - camTranslation.x) +
-                    (plane.position.y - camTranslation.y) * (plane.position.y - camTranslation.y) +
-                    (plane.position.z - camTranslation.z) * (plane.position.z - camTranslation.z)
+                    (jet.position.x - camTranslation.x) * (jet.position.x - camTranslation.x) +
+                    (jet.position.y - camTranslation.y) * (jet.position.y - camTranslation.y) +
+                    (jet.position.z - camTranslation.z) * (jet.position.z - camTranslation.z)
                 )
-                let V = SCNVector3((plane.position.x - camTranslation.x) / dist,
-                                   (plane.position.y - camTranslation.y) / dist,
-                                   (plane.position.z - camTranslation.z) / dist
+                let V = SCNVector3((jet.position.x - camTranslation.x) / dist,
+                                   (jet.position.y - camTranslation.y) / dist,
+                                   (jet.position.z - camTranslation.z) / dist
                 )
                 
-                plane.orientation = SCNQuaternion(V.x, V.y, V.z, 1.0)
+                jet.orientation = SCNQuaternion(V.x, V.y, V.z, 1.0)
                 
-//                plane.eulerAngles = SCNVector3(Float.random(in: -3.14159..<3.14159),
+//                jet.eulerAngles = SCNVector3(Float.random(in: -3.14159..<3.14159),
 //                                               Float.random(in: -3.14159..<3.14159),
 //                                               Float.random(in: -3.14159..<3.14159))
                 
                 // camera position, then invert orientation along local Z and translate
                 //let camTransformInvert = scene.session.currentFrame!.camera.eulerAngles.addingProduct(0, simd_float3(x: 0, y: 1, z: 0))
                 
-                //plane.eulerAngles = SCNVector3(camTransformInvert)
-                //plane.localTranslate(by: SCNVector3(0, 0, -5.0))
+                //jet.eulerAngles = SCNVector3(camTransformInvert)
+                //jet.localTranslate(by: SCNVector3(0, 0, -5.0))
                 
-                scene.scene.rootNode.addChildNode(plane)
+                scene.scene.rootNode.addChildNode(jet)
                 
-                addTarget(plane, withVelocity: plane.convertVector(SCNVector3(0, 0, -0.2), to: nil), lifetime: 9999.0)
+                addTarget(jet, withVelocity: jet.convertVector(SCNVector3(0, 0, -0.2), to: nil), lifetime: 9999.0)
             }
             
             framesTillNextTarget = 120 * 4.0
@@ -157,6 +163,9 @@ class SceneManager: NSObject {
     // MARK: -- public methods
     
     func start() {
+        
+        scene.delegate = self
+        
         timer = Timer(timeInterval: TimeInterval(1.0/fps), repeats: true) {
             [weak self] timer in
             guard let strongSelf = self else {
@@ -183,5 +192,28 @@ class SceneManager: NSObject {
     func addBullet(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float) {
         let newNode = SCNMovingBullet(node, withVelocity: withVelocity, lifetime: lifetime)
         bulletsInMotion.append(newNode)
+    }
+    
+    func addCube(_ pos: SCNVector3, withTransform tf: SCNMatrix4) {
+        let box = SCNBox(width: 1.0, height: 1.0, length: 1.0, chamferRadius: 0)
+        let img = textureImage
+        let mat = SCNMaterial()
+        
+        mat.diffuse.contents = img
+        box.materials = [mat]
+        
+        let node = SCNNode(geometry: box)
+        node.position = pos
+        node.transform = tf
+        node.scale = SceneManager.scaleVector
+        
+        scene.scene.rootNode.addChildNode(SCNNode(geometry: box))
+    }
+}
+
+extension SceneManager: ARSCNViewDelegate {
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        // TODO: plane detection
     }
 }
