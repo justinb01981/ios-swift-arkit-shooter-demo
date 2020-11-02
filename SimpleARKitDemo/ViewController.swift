@@ -51,14 +51,7 @@ class ViewController: UIViewController {
     }
     
     @objc func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
-        let tapLocation = recognizer.location(in: sceneView)
-        let hitTestResults = sceneView.hitTest(tapLocation)
-       
-        guard let node = hitTestResults.first?.node else {
-            return
-        }
-        
-        scnManager.selectedNode = node
+
     }
     
     @IBAction func onChangeTexture(_ sender: Any) {
@@ -66,6 +59,10 @@ class ViewController: UIViewController {
         imagePicker = ImagePicker(presentationController: self, delegate: self)
         
         imagePicker.present(from: sender as! UIView)
+    }
+    
+    @IBAction func onDeleteSelected(_ sender: Any) {
+        scnManager.deleteSelected()
     }
     
 }
@@ -83,6 +80,16 @@ extension ViewController {
         
         guard let frame = sceneView.session.currentFrame else {
             return
+        }
+        
+        let tapLocation = touches.first!.location(in: sceneView)
+        let hitTestResults = sceneView.hitTest(tapLocation)
+        
+        guard hitTestResults.count == 0
+            else {
+                scnManager.selectedNode = hitTestResults.first!.node
+                print("selected node")
+                return
         }
         
         // get camera orientation / position
@@ -106,7 +113,9 @@ extension ViewController {
         }
         */
         
-        scnManager.addCube(pos, withTransform: tf)
+        let newNode = scnManager.addCube(pos, withTransform: tf)
+        
+        scnManager.selectedNode = newNode
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -159,6 +168,22 @@ extension ViewController {
             default:
             break
         }
+        
+        let nodeTranformMatrix = [
+            [node.transform.m11, node.transform.m21, node.transform.m31, node.transform.m41],
+            [node.transform.m12, node.transform.m22, node.transform.m32, node.transform.m42],
+            [node.transform.m13, node.transform.m23, node.transform.m33, node.transform.m43],
+            [node.transform.m14, node.transform.m24, node.transform.m34, node.transform.m44]
+        ]
+
+        var str = ""
+        for c in 0..<4 {
+            str += "\n"
+            for r in 0..<4 {
+                str += "\(nodeTranformMatrix[c][r]) "
+            }
+        }
+        print("selectedNode:\n\(str)")
     }
 }
 

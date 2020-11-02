@@ -55,7 +55,7 @@ class SceneManager: NSObject {
     var selectedNode: SCNNode!
     var textureImage: UIImage!
     
-    static var scaleVector = SCNVector3(0.02, 0.02, 0.02)
+    static var scaleVector = SCNVector3(0.2, 0.2, 0.2)
     
     // MARK: -- implementation
     required init(scene: ARSCNView) {
@@ -109,6 +109,7 @@ class SceneManager: NSObject {
         }
     }
     
+    @available(*,deprecated)
     private func updateTargets() {
         
         if framesTillNextTarget <= 0 {
@@ -173,7 +174,7 @@ class SceneManager: NSObject {
             }
             
             strongSelf.updateMotion()
-            strongSelf.updateTargets()
+            //strongSelf.updateTargets()
         }
         
         RunLoop.main.add(timer, forMode: .default)
@@ -194,7 +195,7 @@ class SceneManager: NSObject {
         bulletsInMotion.append(newNode)
     }
     
-    func addCube(_ pos: SCNVector3, withTransform tf: SCNMatrix4) {
+    func addCube(_ pos: SCNVector3, withTransform tf: SCNMatrix4) -> SCNNode {
         let box = SCNBox(width: 1.0, height: 1.0, length: 1.0, chamferRadius: 0)
         let img = textureImage
         let mat = SCNMaterial()
@@ -203,11 +204,21 @@ class SceneManager: NSObject {
         box.materials = [mat]
         
         let node = SCNNode(geometry: box)
-        node.position = pos
-        node.transform = tf
-        node.scale = SceneManager.scaleVector
+        let vScale: Float = 10.0
+        
+        // column-major order for the SCNMatrix4
+        node.position = SCNVector3(vScale * tf.m31 + tf.m41, vScale * tf.m32 + tf.m42, vScale * tf.m33 + tf.m43)
+        //node.transform = tf
+        node.scale = SCNVector3(-0.001, -0.001, -0.001)
         
         scene.scene.rootNode.addChildNode(SCNNode(geometry: box))
+        
+        return node
+    }
+    
+    func deleteSelected() {
+        self.selectedNode?.removeFromParentNode()
+        print("deleted node")
     }
 }
 
