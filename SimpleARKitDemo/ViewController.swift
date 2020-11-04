@@ -78,44 +78,21 @@ extension ViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        guard let frame = sceneView.session.currentFrame else {
-            return
-        }
-        
         let tapLocation = touches.first!.location(in: sceneView)
         let hitTestResults = sceneView.hitTest(tapLocation)
         
         guard hitTestResults.count == 0
             else {
-                scnManager.selectedNode = hitTestResults.first!.node
-                print("selected node")
+                if hitTestResults.first?.node == scnManager.selectedNode {
+                    scnManager.selectedNode = nil
+                    print("unselected node")
+                }
+                else {
+                    scnManager.selectedNode = hitTestResults.first!.node
+                }
+                
                 return
         }
-        
-        // get camera orientation / position
-        let tf = SCNMatrix4(frame.camera.transform)
-        let v = SCNVector3(-1 * tf.m31, -1 * tf.m32, -1 * tf.m33)
-        let pos = SCNVector3(tf.m41, tf.m42, tf.m43)
-        let Mag: Float = 4.0
-        
-        // add an object with velocity along our camera z-vector
-        /*
-        let planeScene = SCNScene(named: "bullet.scn")
-        
-        if let bullet = planeScene?.rootNode.childNodes.first {
-            bullet.removeFromParentNode()
-            
-            bullet.scale = SCNVector3(0.2, 0.2, 0.2)
-            bullet.position = pos
-            bullet.transform = tf
-            
-            sceneView.scene.rootNode.addChildNode(bullet)
-        }
-        */
-        
-        let newNode = scnManager.addCube(pos, withTransform: tf)
-        
-        scnManager.selectedNode = newNode
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -184,6 +161,28 @@ extension ViewController {
             }
         }
         print("selectedNode:\n\(str)")
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        super.touchesEnded(touches, with: event)
+        
+        guard scnManager.selectedNode == nil
+            else {
+                return
+        }
+        
+        guard let frame = sceneView.session.currentFrame else {
+            return
+        }
+        
+        // get camera orientation / position
+        let tf = SCNMatrix4(frame.camera.transform)
+        let pos = SCNVector3(tf.m41, tf.m42, tf.m43)
+        
+        let newNode = scnManager.addCube(pos, withTransform: tf)
+        
+        scnManager.selectedNode = newNode
     }
 }
 

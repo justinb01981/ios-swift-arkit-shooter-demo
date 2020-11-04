@@ -52,7 +52,12 @@ class SceneManager: NSObject {
     var timer: Timer!
     var framesTillNextTarget = 120.0
     var spawnRange: Float = 2.0
-    var selectedNode: SCNNode!
+    var selectedNode: SCNNode! {
+        didSet {
+            oldValue?.geometry?.firstMaterial?.emission.contents = nil
+            selectedNode?.geometry?.firstMaterial?.emission.contents = UIColor.blue
+        }
+    }
     var textureImage: UIImage!
     
     static var scaleVector = SCNVector3(0.2, 0.2, 0.2)
