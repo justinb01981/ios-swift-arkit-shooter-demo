@@ -2,20 +2,27 @@
 //  ViewController.swift
 //  SimpleARKitDemo
 //
-//  Created by Jayven N on 29/9/2017.
-//  Copyright © 2017 AppCoda. All rights reserved.
+// author: justin@domain17.net
 //
 
 import UIKit
 import ARKit
+import Combine
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var axisSelector: UISegmentedControl!
+    @IBOutlet weak var btnPlus: UIButton!
+    @IBOutlet weak var btnMinus: UIButton!
     @IBOutlet var scnManager: SceneManager!
+    @IBOutlet weak var textField: UITextView!
     
     private var imagePicker: ImagePicker!
+    private var cancelme: Cancellable?!
+    private var selCancelme: Cancellable?!
+    private var obsText: AnyCancellable! // retained and freed automatically stops observing
+    private var untested = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,22 +30,40 @@ class ViewController: UIViewController {
         scnManager = SceneManager(scene: sceneView)
         
         addTapGestureToSceneView()
+        
+        obsText = scnManager.objectWillChange.sink {
+            guard let sel = self.scnManager.selectedNode else {
+                self.textField.text = ""
+                return
+            }
+            
+            self.textField.text = self.scnManager.sceneDescription
+        }
+        
+        selCancelme = axisSelector.publisher(for: \.selectedSegmentIndex).sink(receiveValue: {
+            newVal in
+            //self.scnManager.adjustScene(SceneAction(rawValue: newVal)!)
+        })
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         let configuration = ARWorldTrackingConfiguration()
         sceneView.session.run(configuration)
-        
+
+        // now start
         scnManager.start()
+        
+        cancelme = scnManager.objectWillChange.sink(receiveValue: {
+            //
+        })
     }
-    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -51,20 +76,30 @@ class ViewController: UIViewController {
     }
     
     @objc func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
-
+        // TODO? focusing on buttons for now
     }
     
-    @IBAction func onChangeTexture(_ sender: Any) {
-        
+    // MARK: buttons handling
+    
+    var delt: Float = 1.0
+    var deltS: Float = 0.1
+    
+    @IBAction func onMinus(_ sender: Any) {
+        // -
+        delt = -deltS
+        scnManager.adjustSceneNeg(SceneAction(rawValue: axisSelector.selectedSegmentIndex)!)
+    }
+    
+    @IBAction func onPlus(_ sender: Any) {
+        // +
+        delt = deltS
+        scnManager.adjustScenePos(SceneAction(rawValue: axisSelector.selectedSegmentIndex)!)
+    }
+    
+    @IBAction func onSelImage(_ sender: Any) {
         imagePicker = ImagePicker(presentationController: self, delegate: self)
-        
         imagePicker.present(from: sender as! UIView)
     }
-    
-    @IBAction func onDeleteSelected(_ sender: Any) {
-        scnManager.deleteSelected()
-    }
-    
 }
 
 extension float4x4 {
@@ -82,17 +117,13 @@ extension ViewController {
         let hitTestResults = sceneView.hitTest(tapLocation)
         
         guard hitTestResults.count == 0
-            else {
-                if hitTestResults.first?.node == scnManager.selectedNode {
-                    scnManager.selectedNode = nil
-                    print("unselected node")
-                }
-                else {
-                    scnManager.selectedNode = hitTestResults.first!.node
-                }
-                
-                return
+        else {
+            scnManager.selectedNode = hitTestResults.first!.node
+            print("\(DEBUG_PFX) node \(scnManager.selectedNode) selected")
+            return
         }
+        print("\(DEBUG_PFX) node \(scnManager.selectedNode) deselected")
+        scnManager.selectedNode = nil
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -103,48 +134,30 @@ extension ViewController {
             return
         }
         
-        let S = (touch.location(in: view).x - touch.previousLocation(in: view).x) / abs(touch.location(in: view).x - touch.previousLocation(in: view).x)
+        let touchDelt: CGFloat = (touch.location(in: view).x - touch.previousLocation(in: view).x)
+        /
+        abs(touch.location(in: view).x - touch.previousLocation(in: view).x)
         
-        if S.isNaN {
+        if touchDelt.isNaN {
             return
         }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
         
-        let qForAxes = [
-            SCNQuaternion(S * 0.0249974, 0, 0, 0.9996875),
-            SCNQuaternion(0, S * 0.0249974, 0, 0.9996875),
-            SCNQuaternion(0, 0, S * 0.0249974, 0.9996875)
-        ]
-        
-        let tForAxes = [
-            SCNVector3(S * 0.005, 0, 0),
-            SCNVector3(0, S * 0.005, 0),
-            SCNVector3(0, 0, S * 0.005)
-        ]
-        
-        switch axisSelector.selectedSegmentIndex {
-            case 0:
-            node.localRotate(by: qForAxes[axisSelector.selectedSegmentIndex])
-            
-            case 1:
-            node.localRotate(by: qForAxes[axisSelector.selectedSegmentIndex])
-            
-            case 2:
-            node.localRotate(by: qForAxes[axisSelector.selectedSegmentIndex])
+        // TODO: handle? maybe drop carried node - for now deselect by touching again
+    }
+    
+    func updateScene() {
+        scnManager.adjustScene(SceneAction(rawValue: axisSelector.selectedSegmentIndex)!)
+    }
+}
 
-            // case 3 ignored
-            
-            case 4:
-            node.localTranslate(by: tForAxes[0])
-            
-            case 5:
-            node.localTranslate(by: tForAxes[1])
-            
-            case 6:
-            node.localTranslate(by: tForAxes[2])
-            
-            default:
-            break
-        }
+// MARK: -- extensions
+
+extension ViewController {
+    func printMatrix(_ node: SCNNode) {
         
         let nodeTranformMatrix = [
             [node.transform.m11, node.transform.m21, node.transform.m31, node.transform.m41],
@@ -152,7 +165,7 @@ extension ViewController {
             [node.transform.m13, node.transform.m23, node.transform.m33, node.transform.m43],
             [node.transform.m14, node.transform.m24, node.transform.m34, node.transform.m44]
         ]
-
+        
         var str = ""
         for c in 0..<4 {
             str += "\n"
@@ -161,28 +174,8 @@ extension ViewController {
             }
         }
         print("selectedNode:\n\(str)")
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        super.touchesEnded(touches, with: event)
-        
-        guard scnManager.selectedNode == nil
-            else {
-                return
-        }
-        
-        guard let frame = sceneView.session.currentFrame else {
-            return
-        }
-        
-        // get camera orientation / position
-        let tf = SCNMatrix4(frame.camera.transform)
-        let pos = SCNVector3(tf.m41, tf.m42, tf.m43)
-        
-        let newNode = scnManager.addCube(pos, withTransform: tf)
-        
-        scnManager.selectedNode = newNode
+        scnManager.adjustScene(SceneAction(rawValue: axisSelector.selectedSegmentIndex)!)
     }
 }
 

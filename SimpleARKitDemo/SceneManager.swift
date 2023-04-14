@@ -2,16 +2,17 @@
 //  SceneManager.swift
 //  SimpleARKitDemo
 //
-//  Created by Justin Brady on 11/29/19.
-//  Copyright © 2019 AppCoda. All rights reserved.
+// author: justin@domain17.net
 //
 
 import Foundation
 import UIKit
 import ARKit
+import Combine
 
-
-class SceneManager: NSObject {
+class SceneManager: NSObject, ObservableObject {
+    
+    static var staticMgr: SceneManager!
     
     //MARK: -- private types
     class SCNMovingNode: NSObject {
@@ -40,7 +41,7 @@ class SceneManager: NSObject {
         override init(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float = 999.0) {
             super.init(node, withVelocity: withVelocity, lifetime: lifetime)
             
-            node.scale = SCNVector3(0.2, 0.2, 0.2)
+            node.scale = SCNVector3(SIMP_CUBE_SIZE, SIMP_CUBE_SIZE, SIMP_CUBE_SIZE)
         }
     }
     
@@ -52,23 +53,131 @@ class SceneManager: NSObject {
     var timer: Timer!
     var framesTillNextTarget = 120.0
     var spawnRange: Float = 2.0
-    var selectedNode: SCNNode! {
+    
+    @Published var selectedNode: SCNNode? {
         didSet {
+            // if no texture picked?
             oldValue?.geometry?.firstMaterial?.emission.contents = nil
-            selectedNode?.geometry?.firstMaterial?.emission.contents = UIColor.blue
         }
     }
+    
+    @Published var sceneDescription: String?
+    
+    // TODO: -- find out a way to stream video to the texture material
     var textureImage: UIImage!
     
-    static var scaleVector = SCNVector3(0.2, 0.2, 0.2)
+    private var adjustSign = 1.0
     
     // MARK: -- implementation
     required init(scene: ARSCNView) {
-        self.scene = scene
+        super.init()
         
+        if let single = SceneManager.staticMgr {
+            if single.scene != scene {
+                fatalError() // cant do that yet
+            }
+            return
+        }
+        
+        self.scene = scene
         self.textureImage = UIImage(named: "bullettex.png")
 
-        super.init()
+        SceneManager.staticMgr = self
+    }
+    
+    func adjustScenePos(_ action: SceneAction) {
+        adjustSign = 1
+        adjustScene(action)
+    }
+    
+    func adjustSceneNeg(_ action: SceneAction) {
+        adjustSign = -1
+        adjustScene(action)
+    }
+    
+    func adjustScene(_ action: SceneAction) {
+        
+        guard let cam = scene.session.currentFrame?.camera else {
+            return
+        }
+        
+        // get camera orientation / position
+        let tf = SCNMatrix4(cam.transform)
+
+        let node: SCNNode! = selectedNode
+        
+        let S = adjustSign
+        
+        let R = S * ((.pi * 2.0) / SIMP_Q_ROTATE_STEPS)
+        
+        let Rqc = 0.9996875
+        let qForAxes = [
+            SCNQuaternion(R, 0, 0, Rqc),
+            SCNQuaternion(0, R, 0, Rqc),
+            SCNQuaternion(0, 0, R, Rqc)
+        ]
+        let tForAxes = [
+            SCNVector3(SIMP_carryDist*S, 0, 0),
+            SCNVector3(0, SIMP_carryDist*S, 0),
+            SCNVector3(0, 0, SIMP_carryDist*S)
+        ]
+        
+        guard node != nil || action == .ADDOBJECT
+        else {
+            print("\(DEBUG_PFX) no node - bail")
+            return
+        }
+        
+        switch action {
+            
+        case .ROTATE_X:
+            node.localRotate(by: qForAxes[0])
+            
+        case .ROTATE_Y:
+            node.localRotate(by: qForAxes[1])
+            
+        case .ROTATE_Z:
+            node.localRotate(by: qForAxes[2])
+            
+            // case 3 ignored
+            
+        case .TRANSLATE_X:
+            node.localTranslate(by: tForAxes[0])
+            
+        case .TRANSLATE_Y:
+            node.localTranslate(by: tForAxes[1])
+            
+        case .TRANSLATE_Z:
+            node.localTranslate(by: tForAxes[2])
+            
+        case .ADDOBJECT:
+            do {
+                // components inputs
+                let carryDist = Float(SIMP_carryDist)
+                let vvel = SCNVector3(0.000001, 0.000001, 0.000001)
+                
+                // (see AR anchors) and place object in front of the camera
+                var tfnew = cam.transform
+//                tfnew.columns.3 *= carryDist
+                
+                // add to scene
+                selectedNode = addCube(SCNMatrix4(tfnew))
+                
+                if let node = selectedNode {
+                    // set in motion
+                    nodesInMotion.append(SCNMovingNode(node, withVelocity: vvel))
+                }
+                
+                print("set weapons for stun in your unit test")
+            }
+            
+        case .DELOBJECT:
+            deleteSelected()
+        
+        default:
+            fatalError()
+            break
+        }
     }
     
     // MARK: -- private helpers
@@ -112,9 +221,33 @@ class SceneManager: NSObject {
                 bulletsInMotion.removeAll(where: { $0.scnNode == node.scnNode })
             }
         }
+        
+        dragSelectedNode()
     }
     
-    @available(*,deprecated)
+    private func dragSelectedNode() {
+        if let node = selectedNode,
+           let cam = scene.session.currentFrame?.camera {
+            var tform = SCNMatrix4(cam.transform)
+    
+            node.transform = SCNMatrix4(cam.transform)
+            
+            let cdistC = Float(SIMP_carryDist)
+            // translate position along Z
+            node.transform.m41 += cdistC * tform.m31
+            node.transform.m42 += cdistC * tform.m32
+            node.transform.m43 += cdistC * tform.m33
+            
+            /*
+            node.position.x += V.x
+            node.position.y += V.y
+            node.position.z += V.z
+            
+            print("\(DEBUG_PFX) dragging node \(node.debugDescription) to cam-relative position \(V)")
+             */
+        }
+    }
+    
     private func updateTargets() {
         
         if framesTillNextTarget <= 0 {
@@ -127,7 +260,7 @@ class SceneManager: NSObject {
                 jet.removeFromParentNode()
                 
                 // scale model to approximate size user expects
-                jet.scale = SCNVector3(0.2, 0.2, 0.2)
+                jet.scale = SCNVector3(SIMP_JET_SCALE, SIMP_JET_SCALE, SIMP_JET_SCALE)
 
                 jet.position = SCNVector3(camTranslation.x + Float.random(in: -spawnRange..<spawnRange),
                                             camTranslation.y /* + Float.random(in: -spawnRange..<spawnRange)*/,
@@ -160,13 +293,15 @@ class SceneManager: NSObject {
                 addTarget(jet, withVelocity: jet.convertVector(SCNVector3(0, 0, -0.2), to: nil), lifetime: 9999.0)
             }
             
-            framesTillNextTarget = 120 * 4.0
+            framesTillNextTarget = SIMP_SPAWN_INTERVAL_MS / 1000.0 * 120
         }
         
         framesTillNextTarget -= 1
     }
     
     // MARK: -- public methods
+    
+    var testFinished  = false
     
     func start() {
         
@@ -179,7 +314,14 @@ class SceneManager: NSObject {
             }
             
             strongSelf.updateMotion()
-            //strongSelf.updateTargets()
+            strongSelf.updateTargets()
+            
+            strongSelf.dragSelectedNode()
+            
+            if !strongSelf.testFinished, strongSelf.scene.session.currentFrame != nil {
+                strongSelf.test()
+                strongSelf.testFinished = true
+            }
         }
         
         RunLoop.main.add(timer, forMode: .default)
@@ -188,6 +330,11 @@ class SceneManager: NSObject {
     func stop() {
         timer.invalidate()
         timer = nil
+    }
+    
+    func test() {
+        ARTest().testTransMatrix(with: scene)
+        print("sceneManager: test done")
     }
     
     func addTarget(_ node: SCNNode, withVelocity: SCNVector3, lifetime: Float) {
@@ -200,7 +347,7 @@ class SceneManager: NSObject {
         bulletsInMotion.append(newNode)
     }
     
-    func addCube(_ pos: SCNVector3, withTransform tf: SCNMatrix4) -> SCNNode {
+    func addCube(_ tf: SCNMatrix4) -> SCNNode {
         let box = SCNBox(width: 1.0, height: 1.0, length: 1.0, chamferRadius: 0)
         let img = textureImage
         let mat = SCNMaterial()
@@ -209,14 +356,15 @@ class SceneManager: NSObject {
         box.materials = [mat]
         
         let node = SCNNode(geometry: box)
-        let vScale: Float = 10.0
+        let atDist = Float(SIMP_carryDist)
+        
+        scene.scene.rootNode.addChildNode(node)
         
         // column-major order for the SCNMatrix4
-        node.position = SCNVector3(vScale * tf.m31 + tf.m41, vScale * tf.m32 + tf.m42, vScale * tf.m33 + tf.m43)
-        //node.transform = tf
-        node.scale = SCNVector3(-0.001, -0.001, -0.001)
+        node.transform = tf
         
-        scene.scene.rootNode.addChildNode(SCNNode(geometry: box))
+        // TODO: remove this step
+        node.scale = SCNVector3(SIMP_CUBE_SIZE, SIMP_CUBE_SIZE, SIMP_CUBE_SIZE)
         
         return node
     }

@@ -13,6 +13,10 @@
 		D02040E823F74C9000E5940C /* bullet.obj in Resources */ = {isa = PBXBuildFile; fileRef = D02040E723F74C9000E5940C /* bullet.obj */; };
 		D02040EA23F74CDB00E5940C /* bullettex.png in Resources */ = {isa = PBXBuildFile; fileRef = D02040E923F74CDB00E5940C /* bullettex.png */; };
 		D02040EC23F74DC100E5940C /* bullet.scn in Resources */ = {isa = PBXBuildFile; fileRef = D02040EB23F74DC100E5940C /* bullet.scn */; };
+		D03401FB29E5D56E00545C07 /* SceneActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03401FA29E5D56E00545C07 /* SceneActions.swift */; };
+		D03401FD29E687D900545C07 /* debg.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03401FC29E687D900545C07 /* debg.swift */; };
+		D03401FF29E7789300545C07 /* ARSceneTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03401FE29E7789300545C07 /* ARSceneTest.swift */; };
+		D034020129E9174E00545C07 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034020029E9174E00545C07 /* Constants.swift */; };
 		D07E2DC523F5FA8700350994 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09F648C2391C70200A698BC /* SceneManager.swift */; };
 		D0AFF148254F3E64002215B1 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AFF147254F3E64002215B1 /* ImagePicker.swift */; };
 		D0FD8C0123F5F35600BAE04F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F447DABE1F7E028300713E8D /* AppDelegate.swift */; };
@@ -29,6 +33,10 @@
 		D02040E723F74C9000E5940C /* bullet.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bullet.obj; path = ../../../Desktop/bullet.obj; sourceTree = "<group>"; };
 		D02040E923F74CDB00E5940C /* bullettex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bullettex.png; sourceTree = "<group>"; };
 		D02040EB23F74DC100E5940C /* bullet.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = bullet.scn; sourceTree = "<group>"; };
+		D03401FA29E5D56E00545C07 /* SceneActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneActions.swift; sourceTree = "<group>"; };
+		D03401FC29E687D900545C07 /* debg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = debg.swift; sourceTree = "<group>"; };
+		D03401FE29E7789300545C07 /* ARSceneTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARSceneTest.swift; sourceTree = "<group>"; };
+		D034020029E9174E00545C07 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D09F648C2391C70200A698BC /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
 		D0AFF147254F3E64002215B1 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		F447DABB1F7E028300713E8D /* SimpleARKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleARKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,6 +62,9 @@
 		F447DAB21F7E028300713E8D = {
 			isa = PBXGroup;
 			children = (
+				D034020029E9174E00545C07 /* Constants.swift */,
+				D03401FE29E7789300545C07 /* ARSceneTest.swift */,
+				D03401FC29E687D900545C07 /* debg.swift */,
 				F447DABD1F7E028300713E8D /* SimpleARKitDemo */,
 				F447DABC1F7E028300713E8D /* Products */,
 			);
@@ -73,6 +84,7 @@
 				F447DABE1F7E028300713E8D /* AppDelegate.swift */,
 				F447DAC01F7E028300713E8D /* ViewController.swift */,
 				D09F648C2391C70200A698BC /* SceneManager.swift */,
+				D03401FA29E5D56E00545C07 /* SceneActions.swift */,
 				D0AFF147254F3E64002215B1 /* ImagePicker.swift */,
 				D0142101237CD0DE00BA36E5 /* newship.obj */,
 				D0142103237CD1CC00BA36E5 /* newship.scn */,
@@ -168,8 +180,12 @@
 			files = (
 				D0FD8C0123F5F35600BAE04F /* AppDelegate.swift in Sources */,
 				D0AFF148254F3E64002215B1 /* ImagePicker.swift in Sources */,
+				D03401FB29E5D56E00545C07 /* SceneActions.swift in Sources */,
+				D03401FF29E7789300545C07 /* ARSceneTest.swift in Sources */,
+				D03401FD29E687D900545C07 /* debg.swift in Sources */,
 				D07E2DC523F5FA8700350994 /* SceneManager.swift in Sources */,
 				D0FD8C0223F5F35800BAE04F /* ViewController.swift in Sources */,
+				D034020129E9174E00545C07 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,7 +261,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -299,7 +315,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = singlefile;
@@ -317,6 +333,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZQVH66AQJ9;
 				INFOPLIST_FILE = SimpleARKitDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.domain17.ARKitExperiments;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -334,6 +351,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZQVH66AQJ9;
 				INFOPLIST_FILE = SimpleARKitDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.domain17.ARKitExperiments;
 				PRODUCT_NAME = "$(TARGET_NAME)";

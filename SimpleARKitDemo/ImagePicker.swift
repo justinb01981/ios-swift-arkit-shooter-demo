@@ -2,8 +2,7 @@
 //  ImagePicker.swift
 //  SimpleARKitDemo
 //
-//  Created by Justin Brady on 11/1/20.
-//  Copyright © 2020 AppCoda. All rights reserved.
+// author: justin@domain17.net
 //
 
 import Foundation
