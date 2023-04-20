@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D00D86ED29EFE4FF009C3044 /* SerializedScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00D86EC29EFE4FF009C3044 /* SerializedScene.swift */; };
 		D0142102237CD0DE00BA36E5 /* newship.obj in Resources */ = {isa = PBXBuildFile; fileRef = D0142101237CD0DE00BA36E5 /* newship.obj */; };
 		D0142104237CD1CC00BA36E5 /* newship.scn in Resources */ = {isa = PBXBuildFile; fileRef = D0142103237CD1CC00BA36E5 /* newship.scn */; };
 		D0142106237CD27800BA36E5 /* texture115.bmp in Resources */ = {isa = PBXBuildFile; fileRef = D0142105237CD27800BA36E5 /* texture115.bmp */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D00D86EC29EFE4FF009C3044 /* SerializedScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializedScene.swift; sourceTree = "<group>"; };
 		D0142101237CD0DE00BA36E5 /* newship.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = newship.obj; path = ../../../workspace/glFlight/models/newship.obj; sourceTree = "<group>"; };
 		D0142103237CD1CC00BA36E5 /* newship.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = newship.scn; sourceTree = "<group>"; };
 		D0142105237CD27800BA36E5 /* texture115.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = texture115.bmp; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 		F447DABD1F7E028300713E8D /* SimpleARKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				D00D86EC29EFE4FF009C3044 /* SerializedScene.swift */,
 				F447DABE1F7E028300713E8D /* AppDelegate.swift */,
 				F447DAC01F7E028300713E8D /* ViewController.swift */,
 				D09F648C2391C70200A698BC /* SceneManager.swift */,
@@ -181,6 +184,7 @@
 				D0FD8C0123F5F35600BAE04F /* AppDelegate.swift in Sources */,
 				D0AFF148254F3E64002215B1 /* ImagePicker.swift in Sources */,
 				D03401FB29E5D56E00545C07 /* SceneActions.swift in Sources */,
+				D00D86ED29EFE4FF009C3044 /* SerializedScene.swift in Sources */,
 				D03401FF29E7789300545C07 /* ARSceneTest.swift in Sources */,
 				D03401FD29E687D900545C07 /* debg.swift in Sources */,
 				D07E2DC523F5FA8700350994 /* SceneManager.swift in Sources */,

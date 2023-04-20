@@ -74,6 +74,8 @@ open class ImagePicker: NSObject {
     }
 }
 
+var imagePickerLastImg: UIImage!
+
 extension ImagePicker: UIImagePickerControllerDelegate {
 
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -82,10 +84,18 @@ extension ImagePicker: UIImagePickerControllerDelegate {
 
     public func imagePickerController(_ picker: UIImagePickerController,
                                       didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        guard let image = info[.editedImage] as? UIImage else {
+        guard let image = info[.editedImage] as? UIImage,
+              let coreimg = image.cgImage
+        else {
             return self.pickerController(picker, didSelect: nil)
         }
-        self.pickerController(picker, didSelect: image)
+        
+        
+        // rotate ccw 90deg
+        var rotated = CIImage(cgImage: coreimg.copy()!).transformed(by: CGAffineTransform(rotationAngle: 0.1))
+        imagePickerLastImg = UIImage(ciImage: rotated)
+
+        pickerController(picker, didSelect: imagePickerLastImg)
     }
 }
 

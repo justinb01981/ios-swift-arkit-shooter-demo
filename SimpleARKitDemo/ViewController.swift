@@ -63,11 +63,15 @@ class ViewController: UIViewController {
         cancelme = scnManager.objectWillChange.sink(receiveValue: {
             //
         })
+        
+        scnManager.appear()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         sceneView.session.pause()
+        
+        scnManager.disappear()
     }
     
     func addTapGestureToSceneView() {
@@ -118,7 +122,11 @@ extension ViewController {
         
         guard hitTestResults.count == 0
         else {
-            scnManager.selectedNode = hitTestResults.first!.node
+            scnManager.selectedNode =
+            scnManager.nodesInMotion.first(where: { n in
+                n.scnNode == hitTestResults.first!.node
+            })!
+            
             print("\(DEBUG_PFX) node \(scnManager.selectedNode) selected")
             return
         }
@@ -173,7 +181,7 @@ extension ViewController {
                 str += "\(nodeTranformMatrix[c][r]) "
             }
         }
-        print("selectedNode:\n\(str)")
+        print("\(DEBUG_PFX) selectedNode:\n\(str)")
         
         scnManager.adjustScene(SceneAction(rawValue: axisSelector.selectedSegmentIndex)!)
     }

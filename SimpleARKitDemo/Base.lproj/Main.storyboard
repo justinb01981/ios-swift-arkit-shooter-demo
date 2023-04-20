@@ -38,7 +38,7 @@
                                             <segment title="X"/>
                                             <segment title="Y"/>
                                             <segment title="Z"/>
-                                            <segment title=" "/>
+                                            <segment title="+"/>
                                             <segment title="X"/>
                                             <segment title="Y"/>
                                             <segment title="Z"/>
@@ -53,11 +53,20 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mKl-qt-Ntq">
+                                        <rect key="frame" x="0.0" y="65" width="53" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="img"/>
+                                        <connections>
+                                            <action selector="onSelImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1Jt-kD-tSt"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.66498211732844714" green="0.66498211732844714" blue="0.66498211732844714" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="x y z" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="hKg-DW-CEd">
-                                <rect key="frame" x="16" y="476" width="343" height="163"/>
+                                <rect key="frame" x="16" y="556" width="343" height="83"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.66498211730000001" green="0.66498211730000001" blue="0.66498211730000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color key="textColor" systemColor="labelColor"/>
@@ -65,7 +74,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zx2-JE-r0s">
-                                <rect key="frame" x="16" y="162" width="30" height="35"/>
+                                <rect key="frame" x="0.0" y="153" width="46" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
@@ -77,7 +86,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejC-kv-l4b">
-                                <rect key="frame" x="329" y="162" width="30" height="36"/>
+                                <rect key="frame" x="329" y="153" width="46" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -86,15 +95,6 @@
                                 </state>
                                 <connections>
                                     <action selector="onPlus:" destination="BYZ-38-t0r" eventType="touchUpInside" id="j75-Zf-l5C"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mKl-qt-Ntq">
-                                <rect key="frame" x="152" y="164" width="86" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="chg mat"/>
-                                <connections>
-                                    <action selector="onSelImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1Jt-kD-tSt"/>
                                 </connections>
                             </button>
                         </subviews>
