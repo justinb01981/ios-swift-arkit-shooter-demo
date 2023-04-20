@@ -272,9 +272,8 @@ class SceneManager: NSObject, ObservableObject, SerializedSceneDelegate {
             let dstZ = cam.transform.translation.z + Float(SIMP_carryDist)*tform.m33
             let intr = Float(4.0)
             
-            node.
-            node.simdTransform.columns.1 = cam.transform.columns.1
-            node.simdTransform.columns.2 = cam.transform.columns.2
+            // duplicate orientation
+            node.eulerAngles = SCNVector3(cam.eulerAngles)
             
             rec.vel.x += (dstX-node.position.x) / intr // 4 seconds to arrive at dst
             rec.vel.y += (dstY-node.position.y) / intr // 4 seconds to arrive at dst
@@ -285,6 +284,7 @@ class SceneManager: NSObject, ObservableObject, SerializedSceneDelegate {
         else {
             desctmp += "cam: \(cam.transform.translation)"
         }
+        
         sceneDescription = desctmp
     }
     
